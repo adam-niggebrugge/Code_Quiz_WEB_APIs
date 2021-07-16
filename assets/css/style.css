@@ -1,0 +1,78 @@
+:root {
+    --dark: #000000;
+    --highlight:#3EB595;
+    --attention-highlight: #FFF447;
+    --light: #ffffff;
+    --neutral: #aaa8a5;
+}
+  
+html {
+    /* sets 1rem to 10px instead of native 16px to make it easier to calculate font-size values for the rest of the page (e.g. 1.6rem is 16px, 2.0rem is 20px, etc.) */
+    font-size: 62.5%;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+h1 {  
+    font-size: 4.5em; 
+    padding: 2em;
+    text-align: center;
+    background-color: var(--neutral);
+    border-radius: 12px;
+    font-style: oblique;
+}
+
+nav > ul > li > a{
+    padding: .75em;
+    color: var(--highlight);
+    font-size: 3.5em;
+}
+
+h2{
+    font-size: 5.5em;
+    text-align: center;
+}
+
+main aside {
+    justify-content: flex-end;
+    padding: 2.5em;
+    display:flex;
+    font-size: 3.5em;
+}
+
+footer {
+    padding: 5em;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    background-color: var(--neutral);
+}
+/* create our main grid with flexbox, use negative margins to offset the padding on the .card-column class */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.card-column {
+    flex: 1 0 100%;
+    padding: 20rem;
+    /* when the screen resizes, make it so our columns don't jump in size */
+    transition: flex-basis 500ms linear;
+    margin-bottom: 1.5rem;
+}
+
+.code-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 100%;
+    padding: 2em;
+    color: var(--dark);
+    transition: all 0.5s ease-in-out;
+}
