@@ -3,8 +3,12 @@
 
 <head>
     <meta charset="UTF-8" />
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="Description" content="Enter your description here" />
+
     <link rel="stylesheet" href="./assets/css/reset.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="./assets/css/style.css">
     <!-- Replaced generic Tab title of Website with company name and three main sections v1.1.0 -->
     <title>Basic Coding Quiz</title>
@@ -13,29 +17,28 @@
 <body>
     
     <header class="header">
-        <h1>Welcome to a Simple Coding Quiz</h1>
+        <h1 id="question">Welcome to a Simple Coding Quiz</h1>
   
         <!-- quick navigation to content sections on the page, semantic html v1.1.0 -->   
-        <nav>
-            <ul>
-                <li><a>High Scores</a></li>
+        <nav class="navbar navbar-light justify-content-around custom-navbar">
+            <ul class="nav">
+                <li class="nav-item"><a class="nav-link custom-navbar" href="#">High Scores</a></li>
             </ul>
+            <label class="nav-item ml-xl-auto">Points Remaining:<span class='d-inline p-3' id='timer'></span></label>
         </nav>
     </header>
 
     <!-- main content, semantic html for accessibilty standards v1.1.0-->
-    <main>  
-        <aside>
-            <label>Timer:<span id='timer'></span></label>
-        </aside>  
-        <article class='row justify-center'>
-            <section class="card-column">
-                <figure class="card code-card">
-                    <h2 id='question'>ccc</h2>
-                    <ol id='possibleAnswers'></ol>
+    <main class="container">     
+        <article class="row">
+            <section class="col-12 text-center">  
+                <figure class="col-12 text-center">
+                    <ol id="answerChoices" class="list-group list-group-flush"></ol>
+                    <label class="list-group list-group-flush"><span id='result'></span></label> 
                 </figure>
+                <button id="startbtn" type="button" class="btn btn-primary btn-custom mx-auto">Start Quiz</button>
             </section>
-        </article>   
+        </article>
     </main>
     
  
@@ -44,7 +47,10 @@
         <h4>Developed by I. A. Niggebrugge</h4>
         <p>&copy; 2021</p>
     </footer>
-    <script src="./assets/js/script.js"></script>
 </body>
+<!-- jquery must be included for bootstrap javascript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<script src="./assets/js/script.js"></script>
 
 </html>

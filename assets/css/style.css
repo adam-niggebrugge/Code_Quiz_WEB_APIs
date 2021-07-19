@@ -12,8 +12,8 @@ html {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 h1 {  
-    font-size: 4.5em; 
-    padding: 2em;
+    font-size: 4em; 
+    padding: 1.5em;
     text-align: center;
     background-color: var(--neutral);
     border-radius: 12px;
@@ -21,58 +21,45 @@ h1 {
 }
 
 nav > ul > li > a{
-    padding: .75em;
     color: var(--highlight);
     font-size: 3.5em;
 }
 
-h2{
-    font-size: 5.5em;
-    text-align: center;
-}
-
-main aside {
-    justify-content: flex-end;
-    padding: 2.5em;
-    display:flex;
+nav > label{
+     color: var(--highlight);
     font-size: 3.5em;
 }
 
+h2{
+    font-size: 5em;
+    text-align: center;
+}
+
+main > article > section > figure > ol > li {
+    font-size: 4em;
+
+}
+
+main > article > section > figure > label {
+    font-size: 2.5em;
+    font-style: oblique;
+}
+
 footer {
-    padding: 5em;
+    padding: 1.5em;
     width: 100%;
     position: absolute;
     bottom: 0;
     text-align: center;
     background-color: var(--neutral);
 }
-/* create our main grid with flexbox, use negative margins to offset the padding on the .card-column class */
-.row {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    margin-left: -1.5rem;
-    margin-right: -1.5rem;
-}
 
-.justify-center {
-    justify-content: center;
-}
+.btn-custom{
+    font-size: 2em;
+    padding: .5em;
+    color: var(--light);
+    background-color: var(--neutral);
+    border-color: var(--dark);
+    border-radius: 10px;
 
-.card-column {
-    flex: 1 0 100%;
-    padding: 20rem;
-    /* when the screen resizes, make it so our columns don't jump in size */
-    transition: flex-basis 500ms linear;
-    margin-bottom: 1.5rem;
-}
-
-.code-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    min-height: 100%;
-    padding: 2em;
-    color: var(--dark);
-    transition: all 0.5s ease-in-out;
 }
