@@ -36,8 +36,8 @@ h2{
 }
 
 main > article > section > figure > ol > li {
-    font-size: 4em;
-
+    font-size: 2.5em;
+    list-style-type: numbers;
 }
 
 main > article > section > figure > label {
@@ -62,4 +62,14 @@ footer {
     border-color: var(--dark);
     border-radius: 10px;
 
+}
+
+.wrong{
+    color: red;
+    background-color: var(--attention-highlight);
+}
+
+.right{
+    color: var(--highlight);
+    background-color: var(--neutral);
 }
