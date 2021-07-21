@@ -2,8 +2,11 @@
     --dark: #000000;
     --highlight:#3EB595;
     --attention-highlight: #FFF447;
+    --soft-highlight: #d1cd93d2;
     --light: #ffffff;
     --neutral: #aaa8a5;
+    --transparent-neutral: #807c7770;
+    --wrong: red;
 }
   
 html {
@@ -65,11 +68,26 @@ footer {
 }
 
 .wrong{
-    color: red;
+    color: var(--wrong);
     background-color: var(--attention-highlight);
 }
 
 .right{
     color: var(--highlight);
     background-color: var(--neutral);
+}
+
+.custom-label{
+    margin: .2em;
+    border-radius: 50px;
+    box-shadow: 5px 10px 5px var(--neutral);
+}
+
+.choice {
+    margin: .2em;
+    box-shadow: 0 4px 8px 0 var(--neutral), 0 6px 20px 0 var(--transparent-neutral);
+}
+
+.choice:hover {
+  box-shadow: inset 0px 0px 8px var(--soft-highlight), 0 0 10px var(--attention-highlight);
 }
