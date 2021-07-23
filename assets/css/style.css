@@ -7,6 +7,7 @@
     --neutral: #aaa8a5;
     --transparent-neutral: #807c7770;
     --wrong: red;
+    --right: green;
 }
   
 html {
@@ -38,11 +39,6 @@ h2{
     text-align: center;
 }
 
-main > article > section > figure > ol > li {
-    font-size: 2.5em;
-    list-style-type: numbers;
-}
-
 main > article > section > figure > label {
     font-size: 2.5em;
     font-style: oblique;
@@ -68,22 +64,25 @@ footer {
 }
 
 .wrong{
+    font-size: 1.5em;
     color: var(--wrong);
     background-color: var(--attention-highlight);
 }
 
 .right{
-    color: var(--highlight);
-    background-color: var(--neutral);
+    font-size: 1.5em;
+    color: var(--light);
+    background-color: var(--highlight);
 }
 
 .custom-label{
     margin: .2em;
-    border-radius: 50px;
     box-shadow: 5px 10px 5px var(--neutral);
 }
 
 .choice {
+    font-size: 2.5em;
+    list-style-type: numbers;
     margin: .2em;
     box-shadow: 0 4px 8px 0 var(--neutral), 0 6px 20px 0 var(--transparent-neutral);
 }
@@ -91,3 +90,12 @@ footer {
 .choice:hover {
   box-shadow: inset 0px 0px 8px var(--soft-highlight), 0 0 10px var(--attention-highlight);
 }
+
+.scores:nth-child(odd){
+    background-color: var(--neutral);
+}
+
+#userScoreLabel{
+    padding: .5em;
+}
+

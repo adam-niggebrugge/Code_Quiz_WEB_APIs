@@ -22,7 +22,7 @@
         <!-- quick navigation to content sections on the page, semantic html v1.1.0 -->   
         <nav class="navbar navbar-light justify-content-around custom-navbar">
             <ul class="nav">
-                <li class="nav-item"><a class="nav-link custom-navbar" href="#">High Scores</a></li>
+                <li class="nav-item"><a id='highScores' class="nav-link custom-navbar" href="#">High Scores</a></li>
             </ul>
             <label class="nav-item ml-xl-auto">Points Remaining:<span class='d-inline p-3' id='timer'></span></label>
         </nav>
@@ -31,20 +31,36 @@
     <!-- main content, semantic html for accessibilty standards v1.1.0-->
     <main class="container">     
         <article class="row">
-            <section class="col-12 text-center">  
+            <section class="col-12 text-center">
                 <figure class="col-12 text-center">
-                    <ol id="answerChoices" class="list-group list-group-flush"></ol>
-                    <label class="list-group list-group-flush custom-label"><span id='result'></span></label> 
+                    <ol id="answerChoices" class="list-group"></ol>
                 </figure>
+                <div col-12 text-center>
+                    <label class="col-4 custom-label"><span id='result'></span></label> 
+                </div>
                 <button id="startbtn" type="button" class="btn btn-primary btn-custom mx-auto">Start Quiz</button>
             </section>
-            <form id="scoreCollector" class="col-12 text-center" style="display:none">
-                <div class="form-group">
-                  <label for="scoreName">Please add your name to be recorded on the Score board.</label>
-                  <input type="text" class="form-control" id="nameGiven" placeholder="Name">
+            <aside id="scoreCollector" class="modal" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Let Everyone Know your Name</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-group">
+                            <label for="scoreName">Please add your name to be recorded on the Score board.</label>
+                                <input type="text" class="form-control" id="nameGiven" placeholder="Name">
+                                <h5 id="userScoreLabel">Your Score :<span id='userScore'></span></h5>
+                            </form>
+                        </div>
+                        <div class="modal-body">
+                            <button type="submit" id="submitScore" class="btn btn-primary">Submit</button>
+                            <button type="submit" id="tryAgain" class="btn btn-primary">Ummm...Another Go?</button>
+                        </div>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>  
+            </aside>  
         </article>
     </main>
     

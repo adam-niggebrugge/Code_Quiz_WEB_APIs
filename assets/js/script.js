@@ -4,12 +4,17 @@ var displayResultEl = document.getElementById('result');
 var dispayQuestionEl = document.getElementById('question');
 var displayTimerEl = document.getElementById('timer');
 var startButtonEl = document.getElementById('startbtn');
-var scoreFormEl = document.getElementById('scoreCollector');
+var scoreFormEl = new bootstrap.Modal(document.getElementById('scoreCollector'));
+var highScoreEl = document.getElementById('highScores');
+var nameSubmitEl = document.getElementById('nameGiven');
+
 //set to global to be available in all functions
 var answer = "";
 var pointsLeft = 60;
 var isGameFinished = false;
+var scorers = [];
 
+debugger
 //Object to hold the questions, answer choices and the correct choice. 
 var questions = [
     {
@@ -119,14 +124,14 @@ function answerResult(){
         }else if (resultTime > 0) {
             resultTime--;
         }
-    }, 1000);
+    }, 250);
     getQuestion();
 }
 
 function reducePoints(){
     if(pointsLeft > 10){
-        //pause for 3 seconds and reduce the points
         pointsLeft = pointsLeft - 10;
+        //Update display since this function is decrementing outside of timerInterval 
         displayTimerEl.textContent = pointsLeft;
     }else{
         pointsLeft = 0;
@@ -184,8 +189,11 @@ function stopGame(){
     var done = {
         title: "You have answered all the questions!",
     };
+    //not clear why, but the timer stops and there appears to be a difference in the "Your Score" and points Remaining
+    displayTimerEl.textContent = pointsLeft;
     renderQuestion(done);
     clearAnswerChoices();
+    recordName();
 }
 
 //When the game ends due to wrong answers or no points left
@@ -195,17 +203,14 @@ function endGame(){
         };
     renderQuestion(over);
     clearAnswerChoices();
-    return;
+    recordName();
 };
 
 startButtonEl.addEventListener("click", startQuiz);
 
 // Attach event listener to document to listen for key event
-document.addEventListener("keydown", function(event) {
-    // If the count is zero, exit function
-    if (pointsLeft === 0) {
-      return;
-    }
+answerChoicesEl.addEventListener("keydown", function(event) {
+
     // Convert all keys to lower case
     var key = event.key;
     var numericCharacters = "0123456789".split("");
@@ -219,7 +224,7 @@ document.addEventListener("keydown", function(event) {
     }
 });
 
-// TODO: Describe the purpose of the following line of code.
+// Adding an event listner for mouse clicking of answers
 answerChoicesEl.addEventListener("click", function(event) {
     if (pointsLeft === 0) {
         return;
@@ -233,5 +238,54 @@ answerChoicesEl.addEventListener("click", function(event) {
 });
 
 function recordName(){
-    
+    scoreFormEl.toggle();
+    var scoreEl = document.getElementById("userScore");
+    scoreEl.innerHTML = pointsLeft;
+    var scoreSubmitEl = document.getElementById('submitScore');
+    scoreSubmitEl.addEventListener("click", function(event) {
+    event.preventDefault();
+
+    // create user object from submission
+    var scorer = {
+        Name: nameSubmitEl.value.trim(),
+        score: pointsLeft
+    };
+    debugger
+    scorers.push(scorer)
+    // set new submission to local storage 
+    localStorage.setItem("userScores", JSON.stringify(scorers));
+    scoreFormEl.toggle();
+    displayHighScores();
+})
+
 };
+
+function init(){
+
+    var lastScorers = JSON.parse(localStorage.getItem('userScores'));
+    if(lastScorers !== null){
+        scorers = lastScorers;
+    }
+}
+
+function displayHighScores(){
+    debugger
+    var tempScoreHolder = [];
+    console.log(tempScoreHolder);
+    for(var i = 0; i < scorers.length; i++){
+        tempScoreHolder = scorers[i].score; 
+    }
+    for(var i = 0; i < scorers.length; i++){
+        console.log(Math.max(tempScoreHolder))
+        var highestScore = Math.max(tempScoreHolder); 
+        
+    }
+    var orderDisplay = tempScoreHolder.splice(highestScore, 1);
+    var li = document.createElement("li");
+    li.textContent =   orderDisplay.Name + " " + orderDisplay.score;  
+    li.setAttribute("class", "scores");
+    answerChoicesEl.appendChild(li);
+    
+}
+
+highScoreEl.addEventListener("click", displayHighScores());
