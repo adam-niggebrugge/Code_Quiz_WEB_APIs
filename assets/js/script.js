@@ -210,12 +210,10 @@ startButtonEl.addEventListener("click", startQuiz);
 
 // Attach event listener to document to listen for key event
 answerChoicesEl.addEventListener("keydown", function(event) {
-
-    // Convert all keys to lower case
-    var key = event.key;
-    var numericCharacters = "0123456789".split("");
-    // Test if key pushed is a number
-    if (numericCharacters.includes(key) && key <= answerChoicesEl.lastElementChild.dataset.index) {
+    //temporary storing of possible choices, never more than 6 choices, 0 not possible
+    var numericCharacters = "123456".split("");
+    // Test if key pushed is an acceptable number, or if the keys are less than current displayed answer highest index
+    if (numericCharacters.includes(event.key) && event.key <= answerChoicesEl.lastElementChild.dataset.index) {
       var guess = event.key;
       guessChecker(guess);
     }else {
@@ -244,48 +242,62 @@ function recordName(){
     var scoreSubmitEl = document.getElementById('submitScore');
     scoreSubmitEl.addEventListener("click", function(event) {
     event.preventDefault();
-
-    // create user object from submission
-    var scorer = {
-        Name: nameSubmitEl.value.trim(),
-        score: pointsLeft
-    };
-    debugger
-    scorers.push(scorer)
-    // set new submission to local storage 
-    localStorage.setItem("userScores", JSON.stringify(scorers));
-    scoreFormEl.toggle();
-    displayHighScores();
-})
-
+        // create user object from submission
+        var scorer = {
+            Name: nameSubmitEl.value.trim(),
+            score: pointsLeft
+        };
+        debugger
+        scorers.push(scorer)
+        // set new submission to local storage 
+        localStorage.setItem("userScores", JSON.stringify(scorers));
+        scoreFormEl.toggle();
+        sortScores();
+        displayHighScores(); 
+    })
 };
 
 function init(){
-
+    debugger
     var lastScorers = JSON.parse(localStorage.getItem('userScores'));
     if(lastScorers !== null){
         scorers = lastScorers;
     }
 }
 
-function displayHighScores(){
+function sortScores(){
     debugger
-    var tempScoreHolder = [];
-    console.log(tempScoreHolder);
-    for(var i = 0; i < scorers.length; i++){
-        tempScoreHolder = scorers[i].score; 
-    }
-    for(var i = 0; i < scorers.length; i++){
-        console.log(Math.max(tempScoreHolder))
-        var highestScore = Math.max(tempScoreHolder); 
-        
-    }
-    var orderDisplay = tempScoreHolder.splice(highestScore, 1);
-    var li = document.createElement("li");
-    li.textContent =   orderDisplay.Name + " " + orderDisplay.score;  
-    li.setAttribute("class", "scores");
-    answerChoicesEl.appendChild(li);
-    
+    //sorting a 2 dimension array from Stack Overflow, jahroy via Mozilla documentation
+    scorers.sort(function compare(a, b){
+        if (a.score === b.score){
+            return 0;
+        } else{
+            return (a.score > b.score) ? -1 : 1;
+        }
+    });
 }
 
-highScoreEl.addEventListener("click", displayHighScores());
+function displayHighScores(){
+    if(scorers !== null){
+        for (var i = 0; i < scorers.length; i++) { 
+            var li = document.createElement("li");
+            li.textContent = scorers[i].Name + "   " + scorers[i].score;
+            li.setAttribute("class", "scores");
+            answerChoicesEl.appendChild(li);
+        }
+    }else{
+        var li = document.createElement("li");
+            li.textContent = "... Board is wide Open! Take a Spot, you are guaranteed a place!";
+            li.setAttribute("class", "scores");
+            answerChoicesEl.appendChild(li);
+    }
+}
+
+highScoreEl.addEventListener("click", function(event){
+        clearAnswerChoices()
+        sortScores();
+        displayHighScores();
+    }
+);
+
+init();
