@@ -3,17 +3,17 @@ var answerChoicesEl = document.getElementById('answerChoices');
 var displayResultEl = document.getElementById('result');
 var dispayQuestionEl = document.getElementById('question');
 var displayTimerEl = document.getElementById('timer');
-var startButtonEl = document.getElementById('startbtn');
+var startGameBtn = document.getElementById('startbtn');
 var scoreFormEl = new bootstrap.Modal(document.getElementById('scoreCollector'));
-var highScoreEl = document.getElementById('highScores');
+var highScoreBtn = document.getElementById('highScores');
 var nameSubmitEl = document.getElementById('nameGiven');
-
+// var tryAgainBtn = document.getElementById('tryAgain'); could not get this functioning
+var ptsLbl = document.getElementById('pointsLabel');
 //set to global to be available in all functions
 var answer = "";
-var pointsLeft = 60;
+var pointsLeft;
 var isGameFinished = false;
 var scorers = [];
-
 debugger
 //Object to hold the questions, answer choices and the correct choice. 
 var questions = [
@@ -29,8 +29,8 @@ var questions = [
     },  
     {
         title: "Arrays in Javascript can be used to store ________.",
-        choices: ["numbers and strings", "other arrays", "booelans", "all of the above"],
-        answer: "all of the above"
+        choices: ["numbers and strings", "other arrays", "booelans", "all choices listed"],
+        answer: "all choices listed"
     }, 
     {
         title: "Inside which HTML element do we put the Javascript?",
@@ -56,7 +56,22 @@ var questions = [
                 "The <head> section",
                 "The <body> section"],
         answer: "Both the &lt;head&gt; section and the &lt;body&gt; section are correct"
-    },  
+    }, 
+    {
+        title: "Which one of these is a JavaScript package manager?",
+        choices: ["Node.js",
+                "TypeScript",
+                "npm"],
+        answer: "npm"
+    },
+    {
+        title: "Who invented JavaScript?",
+        choices: ["Douglas Crockford",
+                "Sheryl Sandberg",
+                "Brendan Eich"],
+        answer: "Brendan Eich"
+    }
+    
 ];
 
 //used to get questions in a random order
@@ -93,8 +108,10 @@ function renderQuestion(object) {
 
 //This function will render choices in the object list and add data attributes to 'listen' if a user presses a key corresponding to multiplechoice
 function renderAnswerChoices(object){  
-    for (var i = 0; i < object.choices.length; i++) {
-        var choice = object.choices[i];  
+    var loopLength = object.choices.length;
+    debugger
+    for (var i = 0; i < loopLength; i++) {
+        var choice = object.choices.splice(randomOrder(object.choices), 1); 
         var li = document.createElement("li");
         li.textContent = choice;
         li.setAttribute("class", "choice");
@@ -177,10 +194,12 @@ function guessChecker(y){
     }
 }
 
-function startQuiz(){
-    startButtonEl.style.display = 'none';
+function startQuiz(){   
+    pointsLeft = 60;
+    startGameBtn.setAttribute("class", "hidden");
     getQuestion();
-    countdown();    
+    ptsLbl.removeAttribute('class', 'hidden');
+    countdown(); 
 };
 
 function stopGame(){
@@ -206,35 +225,6 @@ function endGame(){
     recordName();
 };
 
-startButtonEl.addEventListener("click", startQuiz);
-
-// Attach event listener to document to listen for key event
-answerChoicesEl.addEventListener("keydown", function(event) {
-    //temporary storing of possible choices, never more than 6 choices, 0 not possible
-    var numericCharacters = "123456".split("");
-    // Test if key pushed is an acceptable number, or if the keys are less than current displayed answer highest index
-    if (numericCharacters.includes(event.key) && event.key <= answerChoicesEl.lastElementChild.dataset.index) {
-      var guess = event.key;
-      guessChecker(guess);
-    }else {
-        displayResultEl.innerHTML = "Not a valid choice!";
-        displayResultEl.setAttribute("class", 'wrong');
-    }
-});
-
-// Adding an event listner for mouse clicking of answers
-answerChoicesEl.addEventListener("click", function(event) {
-    if (pointsLeft === 0) {
-        return;
-    }
-    var element = event.target;
-    // checks clicked element is a list item and then calls function to check answer.
-    if (element.matches("li") === true) {
-      var guess = element.getAttribute("id");
-      guessChecker(guess);
-    }
-});
-
 function recordName(){
     scoreFormEl.toggle();
     var scoreEl = document.getElementById("userScore");
@@ -247,7 +237,6 @@ function recordName(){
             Name: nameSubmitEl.value.trim(),
             score: pointsLeft
         };
-        debugger
         scorers.push(scorer)
         // set new submission to local storage 
         localStorage.setItem("userScores", JSON.stringify(scorers));
@@ -258,7 +247,6 @@ function recordName(){
 };
 
 function init(){
-    debugger
     var lastScorers = JSON.parse(localStorage.getItem('userScores'));
     if(lastScorers !== null){
         scorers = lastScorers;
@@ -278,6 +266,11 @@ function sortScores(){
 }
 
 function displayHighScores(){
+    // if(isGameFinished){
+    //         startGameBtn.removeAttribute('class', 'hidden');
+    //         startGameBtn.innerText = 'Play Again';  
+    // }
+    
     if(scorers !== null){
         for (var i = 0; i < scorers.length; i++) { 
             var li = document.createElement("li");
@@ -293,11 +286,51 @@ function displayHighScores(){
     }
 }
 
-highScoreEl.addEventListener("click", function(event){
-        clearAnswerChoices()
-        sortScores();
-        displayHighScores();
-    }
-);
-
 init();
+// All listening elements actions take below
+
+startGameBtn.addEventListener("click", startQuiz);
+
+// tryAgainBtn.addEventListener("click", function(event){
+//     isGameFinished = false;
+//     startQuiz();
+// });
+
+highScoreBtn.addEventListener("click", function(event){
+    event.preventDefault();
+    bthighScoreBtn = new bootstrap.Button(highScoreBtn);
+    bthighScoreBtn.toggle();
+    clearAnswerChoices();
+    sortScores();
+    displayHighScores();
+});
+
+// Attach event listener to document to listen for key event
+answerChoicesEl.addEventListener("keydown", function(event) {
+    event.preventDefault();
+    //temporary storing of possible choices, never more than 6 choices, 0 not possible
+    var numericCharacters = "123456".split("");
+    var key = event.key;
+    debugger
+    // Test if key pushed is an acceptable number, or if the keys are less than current displayed answer highest index
+    if (numericCharacters.includes(key) && key <= answerChoicesEl.lastElementChild.dataset.index) {
+            guessChecker(key);
+    }else {
+        displayResultEl.innerHTML = "Not a valid choice!";
+        displayResultEl.setAttribute("class", 'wrong');
+    }
+});
+
+// Adding an event listner for mouse clicking of answers
+answerChoicesEl.addEventListener("click", function(event) {
+    event.preventDefault();
+    if (pointsLeft === 0) {
+        return;
+    }
+    var element = event.target;
+    // checks clicked element is a list item and then calls function to check answer.
+    if (element.matches("li") === true) {
+      var guess = element.getAttribute("id");
+      guessChecker(guess);
+    }
+});

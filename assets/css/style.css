@@ -62,6 +62,10 @@ footer {
     border-radius: 10px;
 
 }
+/* for elements that need to be hidden on load or some point */
+.hidden{
+    display: none
+}
 
 .wrong{
     font-size: 1.5em;
@@ -95,7 +99,16 @@ footer {
     background-color: var(--neutral);
 }
 
+.scores{
+    padding: .1em;
+    font-size: 1.5em;
+    border-radius: 10px;
+    list-style-type: numbers;
+ 
+}
+
 #userScoreLabel{
     padding: .5em;
+    font-size: 1.5em;
 }
 
