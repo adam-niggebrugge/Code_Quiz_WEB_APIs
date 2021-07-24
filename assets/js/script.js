@@ -71,7 +71,6 @@ var questions = [
                 "Brendan Eich"],
         answer: "Brendan Eich"
     }
-    
 ];
 
 //used to get questions in a random order
@@ -254,7 +253,7 @@ function init(){
 }
 
 function sortScores(){
-    debugger
+
     //sorting a 2 dimension array from Stack Overflow, jahroy via Mozilla documentation
     scorers.sort(function compare(a, b){
         if (a.score === b.score){
@@ -278,7 +277,7 @@ function displayHighScores(){
             li.setAttribute("class", "scores");
             answerChoicesEl.appendChild(li);
         }
-    }else{
+    }else if(scorers.length == 0){
         var li = document.createElement("li");
             li.textContent = "... Board is wide Open! Take a Spot, you are guaranteed a place!";
             li.setAttribute("class", "scores");
@@ -307,7 +306,7 @@ highScoreBtn.addEventListener("click", function(event){
 
 // Attach event listener to document to listen for key event
 answerChoicesEl.addEventListener("keydown", function(event) {
-    event.preventDefault();
+   
     //temporary storing of possible choices, never more than 6 choices, 0 not possible
     var numericCharacters = "123456".split("");
     var key = event.key;
