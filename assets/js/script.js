@@ -4,17 +4,25 @@ var displayResultEl = document.getElementById('result');
 var dispayQuestionEl = document.getElementById('question');
 var displayTimerEl = document.getElementById('timer');
 var startGameBtn = document.getElementById('startbtn');
-var scoreFormEl = new bootstrap.Modal(document.getElementById('scoreCollector'));
 var highScoreBtn = document.getElementById('highScores');
-var nameSubmitEl = document.getElementById('nameGiven');
-// var tryAgainBtn = document.getElementById('tryAgain'); could not get this functioning
 var ptsLbl = document.getElementById('pointsLabel');
+var scoreFormEl = new bootstrap.Modal(document.getElementById('scoreCollector'));
+var scoreEl = document.getElementById("userScore");
+var scoreSubmitEl = document.getElementById('submitScore');
+var tryAgainBtn = document.getElementById('tryAgain'); 
+var nameSubmitEl = document.getElementById('nameGiven');
 //set to global to be available in all functions
 var answer = "";
 var pointsLeft;
 var isGameFinished = false;
 var scorers = [];
-debugger
+var backupQuestions = [{
+    backupTitle: "",
+    backupChoices: [],
+    backupAnswer: ""
+    }
+];
+
 //Object to hold the questions, answer choices and the correct choice. 
 var questions = [
     {
@@ -90,7 +98,7 @@ function countdown() {
                 // Decrement `pointsLeft` by 1
                 pointsLeft--;
             } else {
-                endGame(); 
+                stopGame(); 
                 clearInterval(timeInterval);
             } 
         } else {
@@ -107,8 +115,8 @@ function renderQuestion(object) {
 
 //This function will render choices in the object list and add data attributes to 'listen' if a user presses a key corresponding to multiplechoice
 function renderAnswerChoices(object){  
+    
     var loopLength = object.choices.length;
-    debugger
     for (var i = 0; i < loopLength; i++) {
         var choice = object.choices.splice(randomOrder(object.choices), 1); 
         var li = document.createElement("li");
@@ -152,14 +160,15 @@ function reducePoints(){
     }else{
         pointsLeft = 0;
         displayTimerEl.textContent = pointsLeft;
-        endGame();
+        stopGame();
     }
 }
 
 function getQuestion(){
+    clearAnswerChoices();
     //check if there are any questions left to ask
     if(questions.length >= 1){
-        clearAnswerChoices();
+        
         //create an empty object to temporary hold the indexed question pulled at random
         var x = [];
         //take a question at random from the established question objects, remove it from the set and place it in the temporary holder
@@ -194,43 +203,50 @@ function guessChecker(y){
 }
 
 function startQuiz(){   
+    //check if quiz has occurred in the current session
+    //if true, deep store of the questions prior to mutating object
+    backupQuestions = questionObjectCopy(backupQuestions, questions, isGameFinished);
+    highScoreBtn.setAttribute("class", 'hidden');
     pointsLeft = 60;
+    ptsLbl.removeAttribute('class', 'hidden');
     startGameBtn.setAttribute("class", "hidden");
     getQuestion();
-    ptsLbl.removeAttribute('class', 'hidden');
     countdown(); 
 };
 
 function stopGame(){
     //This is built in function that will end the point reduction/timer
     isGameFinished = true;
-    var done = {
-        title: "You have answered all the questions!",
-    };
-    //not clear why, but the timer stops and there appears to be a difference in the "Your Score" and points Remaining
-    displayTimerEl.textContent = pointsLeft;
-    renderQuestion(done);
-    clearAnswerChoices();
+    // Reset questions
+    questions = [];
+    if(pointsLeft === 0){
+        var over = {
+            title: "GAME OVER!",
+        };
+        
+    }else{
+        var over = {
+            title: "You have answered all the questions!",
+        };
+        //not clear why, but the timer stops and there appears to be a difference in the "Your Score" and points Remaining
+        displayTimerEl.textContent = pointsLeft;
+    }   
+    renderQuestion(over);
+    //Restore questions
+    questions =  questionObjectCopy(questions, backupQuestions, isGameFinished);
     recordName();
 }
 
-//When the game ends due to wrong answers or no points left
-function endGame(){
-    var over = {
-            title: "GAME OVER!",
-        };
-    renderQuestion(over);
-    clearAnswerChoices();
-    recordName();
+function recordName(){
+    //render the modal
+    scoreFormEl.toggle();
+    scoreEl.innerHTML = pointsLeft;
 };
 
-function recordName(){
-    scoreFormEl.toggle();
-    var scoreEl = document.getElementById("userScore");
-    scoreEl.innerHTML = pointsLeft;
-    var scoreSubmitEl = document.getElementById('submitScore');
-    scoreSubmitEl.addEventListener("click", function(event) {
+scoreSubmitEl.addEventListener("click", function(event) {
     event.preventDefault();
+    //don't accept blanks
+    if(nameSubmitEl.value !== ""){
         // create user object from submission
         var scorer = {
             Name: nameSubmitEl.value.trim(),
@@ -242,8 +258,15 @@ function recordName(){
         scoreFormEl.toggle();
         sortScores();
         displayHighScores(); 
-    })
-};
+    }
+})
+
+tryAgainBtn.addEventListener("click", function(event){
+    event.preventDefault();
+    scoreFormEl.toggle();
+    isGameFinished = false;
+    startQuiz();
+});
 
 function init(){
     var lastScorers = JSON.parse(localStorage.getItem('userScores'));
@@ -253,7 +276,6 @@ function init(){
 }
 
 function sortScores(){
-
     //sorting a 2 dimension array from Stack Overflow, jahroy via Mozilla documentation
     scorers.sort(function compare(a, b){
         if (a.score === b.score){
@@ -265,35 +287,50 @@ function sortScores(){
 }
 
 function displayHighScores(){
-    // if(isGameFinished){
-    //         startGameBtn.removeAttribute('class', 'hidden');
-    //         startGameBtn.innerText = 'Play Again';  
-    // }
-    
-    if(scorers !== null){
+    if(isGameFinished){
+            startGameBtn.removeAttribute('class', 'hidden');
+            startGameBtn.setAttribute("class", 'btn btn-primary btn-custom mx-auto');
+            startGameBtn.innerText = 'Play Again';  
+    }
+    if(scorers.length > 0 && scorers !== null){
         for (var i = 0; i < scorers.length; i++) { 
             var li = document.createElement("li");
             li.textContent = scorers[i].Name + "   " + scorers[i].score;
             li.setAttribute("class", "scores");
             answerChoicesEl.appendChild(li);
         }
-    }else if(scorers.length == 0){
+    }else {
         var li = document.createElement("li");
             li.textContent = "... Board is wide Open! Take a Spot, you are guaranteed a place!";
             li.setAttribute("class", "scores");
             answerChoicesEl.appendChild(li);
     }
+    ptsLbl.setAttribute('class', 'hidden');
+}
+//From stackoverflow question https://stackoverflow.com/questions/6612385/why-does-changing-an-array-in-javascript-affect-copies-of-the-array
+function deepObjectCopy(object){
+    var copyOfThingArray = [...object]
+    return copyOfThingArray;
+}
+
+function questionObjectCopy(objectToStore, objectToCopy, isCondtion){
+    objectToStore = deepObjectCopy(objectToCopy)
+    if(isCondtion){
+        for(var i = 0; i < objectToCopy.length; i++){
+            objectToStore[i].choices = deepObjectCopy(objectToCopy[i].backupChoices)
+        }
+    } else{
+        for(var i = 0; i < objectToCopy.length; i++){
+            objectToStore[i].backupChoices = deepObjectCopy(objectToCopy[i].choices)
+        }
+    }
+    return objectToStore;
 }
 
 init();
 // All listening elements actions take below
 
 startGameBtn.addEventListener("click", startQuiz);
-
-// tryAgainBtn.addEventListener("click", function(event){
-//     isGameFinished = false;
-//     startQuiz();
-// });
 
 highScoreBtn.addEventListener("click", function(event){
     event.preventDefault();
@@ -302,22 +339,6 @@ highScoreBtn.addEventListener("click", function(event){
     clearAnswerChoices();
     sortScores();
     displayHighScores();
-});
-
-// Attach event listener to document to listen for key event
-answerChoicesEl.addEventListener("keydown", function(event) {
-   
-    //temporary storing of possible choices, never more than 6 choices, 0 not possible
-    var numericCharacters = "123456".split("");
-    var key = event.key;
-    debugger
-    // Test if key pushed is an acceptable number, or if the keys are less than current displayed answer highest index
-    if (numericCharacters.includes(key) && key <= answerChoicesEl.lastElementChild.dataset.index) {
-            guessChecker(key);
-    }else {
-        displayResultEl.innerHTML = "Not a valid choice!";
-        displayResultEl.setAttribute("class", 'wrong');
-    }
 });
 
 // Adding an event listner for mouse clicking of answers
