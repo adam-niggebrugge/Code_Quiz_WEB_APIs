@@ -22,7 +22,7 @@ var backupQuestions = [{
     backupAnswer: ""
     }
 ];
-
+debugger
 //Object to hold the questions, answer choices and the correct choice. 
 var questions = [
     {
@@ -204,12 +204,16 @@ function guessChecker(y){
 
 function startQuiz(){   
     //check if quiz has occurred in the current session
-    //if true, deep store of the questions prior to mutating object
+    //if true, deep store of the questions prior to mutating object'
+    //debugger
+    clearAnswerChoices()
     backupQuestions = questionObjectCopy(backupQuestions, questions, isGameFinished);
     highScoreBtn.setAttribute("class", 'hidden');
-    pointsLeft = 60;
-    ptsLbl.removeAttribute('class', 'hidden');
     startGameBtn.setAttribute("class", "hidden");
+    isGameFinished = false;
+    pointsLeft = 60;
+    displayTimerEl.textContent = pointsLeft;
+    ptsLbl.removeAttribute('class', 'hidden');
     getQuestion();
     countdown(); 
 };
