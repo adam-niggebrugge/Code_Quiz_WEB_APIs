@@ -243,8 +243,9 @@ function stopGame(){
 
 function recordName(){
     //render the modal
-    scoreFormEl.toggle();
     scoreEl.innerHTML = pointsLeft;
+    nameSubmitEl.value = "";
+    scoreFormEl.toggle();
 };
 
 scoreSubmitEl.addEventListener("click", function(event) {
