@@ -1,5 +1,7 @@
 # Code_Quiz_WEB_APIs
-Demonstration of WEB APIs that can be accessed in the javascript (note this is not a demonstration of a 3rd party javascript frameworks)
+
+Uses Javascript, HTML, CSS.
+The coding demonstrates use of Local Browser Storage.
 
 ## What is Going On
 This is an exercise from Coding Bootcamp, no code to start, freedom to implement in any manner.  
@@ -26,7 +28,7 @@ THEN I can save my initials and my score
 
 ## Preview of Website
 
-coming soon
+[!coming soon]()
 
 ## Live Website
 
