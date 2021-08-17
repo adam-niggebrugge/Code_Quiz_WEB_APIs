@@ -1,5 +1,6 @@
 # Code_Quiz_WEB_APIs
 
+## Technology
 Uses Javascript, HTML, CSS.
 The coding demonstrates use of Local Browser Storage.
 
@@ -28,8 +29,11 @@ THEN I can save my initials and my score
 
 ## Preview of Website
 
-[!coming soon]()
+![CodeQuizRefined](https://user-images.githubusercontent.com/83618122/129657819-1c505fd7-07ec-47b9-9cd3-cf03f083c037.gif)
 
 ## Live Website
 
 [Quiz Time](https://adam-niggebrugge.github.io/Code_Quiz_WEB_APIs/)
+
+### LICENSE
+[License](https://github.com/adam-niggebrugge/Code_Quiz_WEB_APIs/blob/main/LICENSE)
