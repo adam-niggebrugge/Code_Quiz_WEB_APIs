@@ -3,6 +3,8 @@
 ## Technology
 Uses Javascript, HTML, CSS.
 The coding demonstrates use of Local Browser Storage. 
+
+### WHY 🚧
 🙏 Please Note this was a simply constructed, where function defined form. Plans to improve the interface and storage and quiz formatting. So this will be considered under 🚧 with plans to really look into this after 📅 September 14th (because having a 👶 will free up time from 👨‍💼 work?? and at 🏠 home??, super 🙏)
 
 ## What is Going On
